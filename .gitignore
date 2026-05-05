@@ -1,0 +1,10 @@
+bridge/
+.envrc
+.*.lock.hcl
+
+.terraform/
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+

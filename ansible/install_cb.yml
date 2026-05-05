@@ -1,0 +1,23 @@
+- name: Install Couchbase
+  hosts: client
+  vars_files:
+    - vars.yml
+  tasks:
+    - name: Send deb pkg
+      ansible.posix.synchronize:
+        src: "{{cb_server_local}}"
+        dest: /home/ubuntu/cb_server.deb
+      when: cb_server_local != ""
+
+    - name: Install aws cli
+      ansible.builtin.apt:
+        name: awscli
+      when: cb_server_local == "" and cb_server_s3 != ""
+    - name: S3 download deb pkg
+      ansible.builtin.command: "aws s3 cp {{cb_server_s3}} cb_server.deb"
+      when: cb_server_local == "" and cb_server_s3 != ""
+
+    - name: Install pkg
+      become: true
+      ansible.builtin.apt:
+        deb: cb_server.deb

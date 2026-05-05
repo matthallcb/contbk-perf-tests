@@ -1,0 +1,51 @@
+- name: Setup NFS server
+  hosts: nfs
+  tasks:
+    - name: Install NFS server pkg
+      become: true
+      ansible.builtin.apt:
+        name: nfs-kernel-server
+        update_cache: true
+    - name: Create /bk
+      become: true
+      ansible.builtin.file:
+        path: /bk
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: '0777'
+    - name: Add /bk to /etc/exports
+      become: true
+      ansible.builtin.blockinfile:
+        path: /etc/exports
+        block: |
+          /bk *(rw,async,subtree_check)
+    - name: exportfs -a
+      become: true
+      ansible.builtin.command: exportfs -a
+
+- name: Setup NFS clients
+  hosts: client
+  vars_files:
+    - ../bridge/vars.yml
+  tasks:
+    - name: Install NFS common pkg
+      become: true
+      ansible.builtin.apt:
+        name: nfs-common
+        update_cache: true
+    - name: Create /bk
+      become: true
+      ansible.builtin.file:
+        path: /bk
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: '0777'
+    - name: Mount /bk
+      become: true
+      ansible.posix.mount:
+        src: "{{nfs_private_ip}}:/bk"
+        path: /bk
+        state: mounted
+        fstype: nfs
