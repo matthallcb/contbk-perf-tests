@@ -3,3 +3,8 @@ ${nfs_public_ip}
 
 [client]
 ${client_public_ip}
+
+[server]
+%{ for ip in server_public_ips ~}
+${ip}
+%{ endfor ~}

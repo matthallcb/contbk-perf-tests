@@ -102,25 +102,23 @@ resource "aws_instance" "client" {
   }
 }
 
-// resource "aws_instance" "server" {
-//   ami = data.aws_ami.ubuntu.id
-//   instance_type = var.nfs_server_instance_type
-//   security_groups = [aws_security_group.sg.name]
-//   key_name = var.key_name
-//   count = var.server_nodes
-//
-//   root_block_device {
-//     volume_size = 1024
-//     volume_type = "gp3"
-//     throughput = vars.nfs_server.disk_throughput
-//     iops = vars.nfs_server.disk_iops
-//   }
-//
-//   tags = {
-//     Name = "matthall-contbk-server"
-//     Project = "matthall-contbk"
-//   }
-// }
+resource "aws_instance" "server" {
+  ami = data.aws_ami.ubuntu.id
+  instance_type = var.server_instance_type
+  security_groups = [aws_security_group.sg.name]
+  key_name = var.key_name
+  count = var.server_nodes
+  root_block_device {
+    volume_size = 1024
+    volume_type = "gp3"
+    throughput = var.server_disk_throughput
+    iops = var.server_disk_iops
+  }
+  tags = {
+    Name = "matthall-contbk-server"
+    Project = "matthall-contbk"
+  }
+}
 
 output "nfs_public_ip" {
   value = aws_instance.nfs_server.public_ip
@@ -143,6 +141,7 @@ resource "local_file" "ansible_inventory" {
   content = templatefile("${path.module}/templates/inventory.ini.tmpl", {
     nfs_public_ip        = aws_instance.nfs_server.public_ip
     client_public_ip     = aws_instance.client.public_ip
+    server_public_ips    = aws_instance.server[*].public_ip
   })
 }
 
@@ -151,5 +150,7 @@ resource "local_file" "ansible_vars" {
   content = <<-END
     client_private_ip: ${aws_instance.client.private_ip}
     nfs_private_ip: ${aws_instance.nfs_server.private_ip}
+    server_private_ips: [${join(", ", aws_instance.server[*].private_ip)}]
+    server_public_ips: [${join(", ", aws_instance.server[*].public_ip)}]
   END
 }

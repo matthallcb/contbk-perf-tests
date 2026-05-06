@@ -1,5 +1,7 @@
 - name: Install Couchbase
-  hosts: client
+  hosts:
+    - client
+    - server
   vars_files:
     - vars.yml
   tasks:

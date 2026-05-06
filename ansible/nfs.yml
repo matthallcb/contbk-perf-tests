@@ -25,7 +25,9 @@
       ansible.builtin.command: exportfs -a
 
 - name: Setup NFS clients
-  hosts: client
+  hosts:
+    - client
+    - server
   vars_files:
     - ../bridge/vars.yml
   tasks:

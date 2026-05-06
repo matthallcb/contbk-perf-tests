@@ -1,1 +1,2 @@
 cb_server_local: ./couchbase-server-enterprise_totoro-linux_amd64.deb
+cb_install: ../../server/install/

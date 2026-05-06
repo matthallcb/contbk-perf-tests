@@ -1,0 +1,36 @@
+- name: Setup Couchbase cluster
+  hosts: 127.0.0.1
+  vars_files:
+    - vars.yml
+    - ../bridge/vars.yml
+  tasks:
+    - name: Check if cluster initialised
+      ansible.builtin.uri:
+        url: "http://{{server_public_ips[0]}}:8091/pools/default"
+        force_basic_auth: true
+        user: Administrator
+        password: asdasd
+      register: first_node_ping
+      failed_when: "false"
+    - name: Cluster init on first node
+      ansible.builtin.command: "{{cb_install}}/bin/couchbase-cli cluster-init -c {{server_public_ips[0]}} --cluster-username Administrator --cluster-password asdasd --cluster-name contbk-perf --services data"
+      when: "first_node_ping is failed"
+
+    - name: Check if other nodes are in the cluster
+      ansible.builtin.uri:
+        url: "http://{{item}}:8091/pools/default"
+        force_basic_auth: true
+        user: Administrator
+        password: asdasd
+      failed_when: "false"
+      loop: "{{server_public_ips[1:]}}"
+      register: other_nodes_ping
+    - name: Join other nodes
+      ansible.builtin.command: "{{cb_install}}/bin/couchbase-cli server-add -c {{server_public_ips[0]}} --server-add {{server_private_ips[1 + idx]}} -u Administrator -p asdasd --server-add-username Administrator --server-add-password asdasd --services data"
+      when: "item['status'] != 200"
+      loop: "{{other_nodes_ping.results}}"
+      loop_control:
+        index_var: idx
+
+    - name: Rebalance
+      ansible.builtin.command: "{{cb_install}}/bin/couchbase-cli rebalance -c {{server_public_ips[0]}} -u Administrator -p asdasd"
