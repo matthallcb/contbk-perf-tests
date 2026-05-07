@@ -17,3 +17,6 @@ run_for_mins: 10
 
 # Rate limit the number of ops in the workload. Disabled by default
 ops_rate_limit:
+
+# Storage engine for the bucket we restore into.
+restore_storage_engine: magma

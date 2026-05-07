@@ -5,7 +5,6 @@
       become: true
       ansible.builtin.apt:
         name: nfs-kernel-server
-        update_cache: true
     - name: Create /bk
       become: true
       ansible.builtin.file:
@@ -35,7 +34,6 @@
       become: true
       ansible.builtin.apt:
         name: nfs-common
-        update_cache: true
     - name: Create /bk
       become: true
       ansible.builtin.file:

@@ -15,9 +15,15 @@
       ansible.builtin.file:
         path: ~/bk
         state: absent
+      become: true
+      become_user: couchbase
 
     - name: cbbackupmgr config
       ansible.builtin.command: "/opt/couchbase/bin/cbbackupmgr config -a ~/bk -r contbk"
+      become: true
+      become_user: couchbase
 
     - name: cbbackupmgr backup
       ansible.builtin.command: "/opt/couchbase/bin/cbbackupmgr backup -a ~/bk -r contbk -c {{server_private_ips[0]}} -u Administrator -p asdasd -t 8"
+      become: true
+      become_user: couchbase

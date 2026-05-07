@@ -1,0 +1,11 @@
+- name: General (all-node) setup
+  hosts:
+    - nfs
+    - client
+    - server
+  tasks:
+    - name: Install acl package
+      ansible.builtin.apt:
+        name: acl
+        update_cache: true
+      become: true

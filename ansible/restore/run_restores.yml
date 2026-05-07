@@ -1,0 +1,14 @@
+- name: Run cbbackupmgr and cbcontbk restore
+  hosts: client
+  vars_files:
+    - ../vars.yml
+    - ../../bridge/vars.yml
+  tasks:
+    - name: cbbackupmgr restore
+      ansible.builtin.command: "/opt/couchbase/bin/cbbackupmgr restore -a ~/bk -r contbk -c {{','.join(server_private_ips)}} -u Administrator -p asdasd -t 8 --purge"
+      become: true
+      become_user: couchbase
+    - name: cbcontbk restore
+      ansible.builtin.command: "/opt/couchbase/bin/cbcontbk restore-continuous -a ~/bk -r contbk -c {{','.join(server_private_ips)}} -u Administrator -p asdasd -t 8 --purge -l /bk -d /tmp/tmp-contbk -T {{now(utc=true,fmt='%Y-%m-%dT%H:%M:%SZ')}} --start start --end end"
+      become: true
+      become_user: couchbase
