@@ -1,6 +1,9 @@
 cb_server_local: /abs/path/to/couchbase-server.deb
 cb_install: /abs/path/to/server/checkout/install/
 
+# vBuckets for bucket
+bucket_vbs: 1024
+
 # RAM quota for bucket
 bucket_quota: 1024
 

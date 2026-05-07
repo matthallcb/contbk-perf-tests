@@ -39,4 +39,5 @@
           continuousBackupLocation: "/bk"
           continuousBackupInterval: 2
           historyRetentionSeconds: 900000
+          numVBuckets: "{{bucket_vbs}}"
         status_code: 202
