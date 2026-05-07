@@ -1,0 +1,2 @@
+cb_server_local: /abs/path/to/couchbase-server.deb
+cb_install: /abs/path/to/server/checkout/install/
