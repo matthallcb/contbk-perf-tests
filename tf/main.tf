@@ -18,6 +18,16 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # Canonical
 }
 
+resource "aws_placement_group" "pg" {
+  name = "matthall-contbk-pg"
+  strategy = "cluster"
+  tags = {
+    Name    = "matthall-contbk-sg"
+    Project = "matthall-contbk"
+  }
+ 
+}
+
 resource "aws_security_group" "sg" {
   name = "matthall-contbk-sg"
   tags = {
@@ -75,6 +85,7 @@ resource "aws_instance" "nfs_server" {
   ami             = data.aws_ami.ubuntu.id
   instance_type   = var.nfs_server_instance_type
   security_groups = [aws_security_group.sg.name]
+  placement_group = aws_placement_group.pg.name
   key_name        = var.key_name
 
   root_block_device {
@@ -94,6 +105,7 @@ resource "aws_instance" "client" {
   ami             = data.aws_ami.ubuntu.id
   instance_type   = var.client_instance_type
   security_groups = [aws_security_group.sg.name]
+  placement_group = aws_placement_group.pg.name
   key_name        = var.key_name
 
   root_block_device {
@@ -111,6 +123,7 @@ resource "aws_instance" "server" {
   ami = data.aws_ami.ubuntu.id
   instance_type = var.server_instance_type
   security_groups = [aws_security_group.sg.name]
+  placement_group = aws_placement_group.pg.name
   key_name = var.key_name
   count = var.server_nodes
   root_block_device {
