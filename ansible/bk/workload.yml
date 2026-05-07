@@ -1,0 +1,13 @@
+- name: Workload
+  hosts: client
+  vars_files:
+    - ../vars.yml
+    - ../../bridge/vars.yml
+  tasks:
+    - name: Workload
+      ansible.builtin.shell: "timeout {{run_for_mins}}m /opt/couchbase/bin/cbc-pillowfight -U {{server_private_ips[0]}} -u Administrator -P asdasd -J -m 1024 -M 1024 -R -I {{working_items}} -t 8 -r {{ops_set_pc}} {{ ('--rate-limit ' + ops_rate_limit) if ops_rate_limit else '' }}"
+      register: res
+      failed_when: res.rc not in [0, 124]
+    - name: Wait for final backup
+      ansible.builtin.pause:
+        minutes: 2

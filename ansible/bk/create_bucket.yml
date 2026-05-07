@@ -1,0 +1,42 @@
+- name: Remove all continuous backups
+  hosts: nfs
+  vars_files:
+    - ../vars.yml
+    - ../../bridge/vars.yml
+  tasks:
+    - name: Remove continuous backup directories
+      ansible.builtin.shell: "rm -rf /bk/*"
+      become: true
+
+- name: Create bucket with continuous backup enabled
+  hosts: 127.0.0.1
+  vars_files:
+    - ../vars.yml
+    - ../../bridge/vars.yml
+  tasks:
+    - name: Drop bucket if exists
+      ansible.builtin.uri:
+        url: "http://{{server_public_ips[0]}}:8091/pools/default/buckets/default"
+        method: DELETE
+        force_basic_auth: true
+        user: Administrator
+        password: asdasd
+      register: this
+      failed_when: "this.status != 404 and this.status != 200"
+
+    - name: Create bucket
+      ansible.builtin.uri:
+        url: "http://{{server_public_ips[0]}}:8091/pools/default/buckets"
+        method: POST
+        force_basic_auth: true
+        user: Administrator
+        password: asdasd
+        body_format: form-urlencoded
+        body:
+          name: default
+          ramQuota: "{{bucket_quota}}"
+          continuousBackupEnabled: "true"
+          continuousBackupLocation: "/bk"
+          continuousBackupInterval: 2
+          historyRetentionSeconds: 900000
+        status_code: 202

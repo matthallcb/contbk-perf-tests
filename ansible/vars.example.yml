@@ -1,2 +1,19 @@
 cb_server_local: /abs/path/to/couchbase-server.deb
 cb_install: /abs/path/to/server/checkout/install/
+
+# RAM quota for bucket
+bucket_quota: 1024
+
+# Number of documents to load at the beginning.
+total_items: 1000000
+
+# Number of items to have in the working set, i.e. ones that are updated.
+working_items: 1000000
+
+# The percentage of ops that are SETs in the workload.
+ops_set_pc: 100
+
+run_for_mins: 10
+
+# Rate limit the number of ops in the workload. Disabled by default
+ops_rate_limit:

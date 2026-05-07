@@ -1,0 +1,23 @@
+- name: Load data set and do a cbbackupmgr backup
+  hosts: client
+  vars_files:
+    - ../vars.yml
+    - ../../bridge/vars.yml
+  tasks:
+    - name: Load data set
+      ansible.builtin.command: "/opt/couchbase/bin/cbc-pillowfight -U {{server_private_ips[0]}} -u Administrator -P asdasd -J -m 1024 -M 1024 -R -I {{total_items}} --populate-only -t 8"
+
+    - name: Wait for first backup
+      ansible.builtin.pause:
+        minutes: 2
+
+    - name: Ensure ~/bk does not exist
+      ansible.builtin.file:
+        path: ~/bk
+        state: absent
+
+    - name: cbbackupmgr config
+      ansible.builtin.command: "/opt/couchbase/bin/cbbackupmgr config -a ~/bk -r contbk"
+
+    - name: cbbackupmgr backup
+      ansible.builtin.command: "/opt/couchbase/bin/cbbackupmgr backup -a ~/bk -r contbk -c {{server_private_ips[0]}} -u Administrator -p asdasd -t 8"

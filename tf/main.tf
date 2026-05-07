@@ -96,6 +96,11 @@ resource "aws_instance" "client" {
   security_groups = [aws_security_group.sg.name]
   key_name        = var.key_name
 
+  root_block_device {
+    volume_size = 1024
+    volume_type = "gp3"
+  }
+
   tags = {
     Name    = "matthall-contbk-client"
     Project = "matthall-contbk"
