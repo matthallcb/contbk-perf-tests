@@ -1,0 +1,3 @@
+- import_playbook: setup/nfs.yml
+- import_playbook: setup/install_cb.yml
+- import_playbook: setup/setup_cb.yml

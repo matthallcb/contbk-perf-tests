@@ -1,8 +1,8 @@
 - name: Setup Couchbase cluster
   hosts: 127.0.0.1
   vars_files:
-    - vars.yml
-    - ../bridge/vars.yml
+    - ../vars.yml
+    - ../../bridge/vars.yml
   tasks:
     - name: Check if cluster initialised
       ansible.builtin.uri:
@@ -14,7 +14,7 @@
       failed_when: "false"
     - name: Cluster init on first node
       ansible.builtin.command: "{{cb_install}}/bin/couchbase-cli cluster-init -c {{server_public_ips[0]}} --cluster-username Administrator --cluster-password asdasd --cluster-name contbk-perf --services data"
-      when: "first_node_ping is failed"
+      when: "first_node_ping.status != 200"
 
     - name: Check if other nodes are in the cluster
       ansible.builtin.uri:

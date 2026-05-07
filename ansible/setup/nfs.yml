@@ -29,7 +29,7 @@
     - client
     - server
   vars_files:
-    - ../bridge/vars.yml
+    - ../../bridge/vars.yml
   tasks:
     - name: Install NFS common pkg
       become: true
