@@ -19,20 +19,20 @@ data "aws_ami" "ubuntu" {
 }
 
 resource "aws_placement_group" "pg" {
-  name = "matthall-contbk-pg"
+  name = "contbk-pg"
   strategy = "cluster"
   tags = {
-    Name    = "matthall-contbk-sg"
-    Project = "matthall-contbk"
+    Name    = "contbk-sg"
+    Project = "contbk"
   }
  
 }
 
 resource "aws_security_group" "sg" {
-  name = "matthall-contbk-sg"
+  name = "contbk-sg"
   tags = {
-    Name    = "matthall-contbk-sg"
-    Project = "matthall-contbk"
+    Name    = "contbk-sg"
+    Project = "contbk"
   }
 }
 
@@ -96,8 +96,8 @@ resource "aws_instance" "nfs_server" {
   }
 
   tags = {
-    Name    = "matthall-contbk-nfs-server"
-    Project = "matthall-contbk"
+    Name    = "contbk-nfs-server"
+    Project = "contbk"
   }
 }
 
@@ -114,8 +114,8 @@ resource "aws_instance" "client" {
   }
 
   tags = {
-    Name    = "matthall-contbk-client"
-    Project = "matthall-contbk"
+    Name    = "contbk-client"
+    Project = "contbk"
   }
 }
 
@@ -133,8 +133,8 @@ resource "aws_instance" "server" {
     iops = var.server_disk_iops
   }
   tags = {
-    Name = "matthall-contbk-server"
-    Project = "matthall-contbk"
+    Name = "contbk-server"
+    Project = "contbk"
   }
 }
 
