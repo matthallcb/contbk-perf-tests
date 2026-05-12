@@ -1,0 +1,3 @@
+- import_playbook: bk/create_bucket.yml
+- import_playbook: bk/load_and_backup.yml
+- import_playbook: bk/workload.yml
