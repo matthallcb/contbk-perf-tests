@@ -40,4 +40,5 @@
           continuousBackupInterval: 2
           historyRetentionSeconds: 900000
           numVBuckets: "{{bucket_vbs}}"
+          evictionPolicy: "{{eviction_policy}}"
         status_code: 202

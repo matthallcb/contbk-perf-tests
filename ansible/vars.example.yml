@@ -1,6 +1,9 @@
 cb_server_local: /abs/path/to/couchbase-server.deb
 cb_install: /abs/path/to/server/checkout/install/
 
+# The eviction policy for both the backup and restore buckets
+eviction_policy: fullEviction
+
 # vBuckets for bucket
 bucket_vbs: 1024
 
