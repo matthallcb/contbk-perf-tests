@@ -27,4 +27,5 @@
           ramQuota: "{{bucket_quota}}"
           storageBackend: "{{restore_storage_engine}}"
           evictionPolicy: "{{eviction_policy}}"
+          numVBuckets: "{{bucket_vbs}}"
         status_code: 202
