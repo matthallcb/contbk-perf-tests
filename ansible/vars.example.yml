@@ -26,3 +26,6 @@ ops_rate_limit:
 
 # Storage engine for the bucket we restore into.
 restore_storage_engine: magma
+
+# Ramsize per node in the cluster
+cluster_ramsize: 28000

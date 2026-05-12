@@ -13,7 +13,7 @@
       register: first_node_ping
       failed_when: "false"
     - name: Cluster init on first node
-      ansible.builtin.command: "{{cb_install}}/bin/couchbase-cli cluster-init -c {{server_public_ips[0]}} --cluster-username Administrator --cluster-password asdasd --cluster-name contbk-perf --services data"
+      ansible.builtin.command: "{{cb_install}}/bin/couchbase-cli cluster-init -c {{server_public_ips[0]}} --cluster-username Administrator --cluster-password asdasd --cluster-name contbk-perf --services data --cluster-ramsize {{cluster_ramsize}}"
       when: "first_node_ping.status != 200"
 
     - name: Check if other nodes are in the cluster
