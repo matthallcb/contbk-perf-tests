@@ -38,6 +38,7 @@
           continuousBackupEnabled: "true"
           continuousBackupLocation: "/bk"
           continuousBackupInterval: 2
+          continuousBackupRetentionPeriod: 1440
           historyRetentionSeconds: 900000
           numVBuckets: "{{bucket_vbs}}"
           evictionPolicy: "{{eviction_policy}}"
